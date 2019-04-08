@@ -13,7 +13,11 @@ $.ajax({
         var parkImg = response.data[i].images[0].url;
 
         var parkCard = 
-        $("<span class='card' style='width: 18rem;'>" +
+        $("<span class='card' data-id='" + i + "' style='width: 18rem;'>" +
+            "<div class='form-check'>" +
+                "<input class='form-check-input' type='checkbox' value=''" + "id='defaultCheck1' data-id='" + i + "'>" +
+                " <label class='form-check-label' for='defaultCheck1'></label>" +
+            "</div>" +
             "<img src='" + parkImg + "' class='card-img-top' alt='park-photo'>" +
             "<span class='card-body module'>" +
                 "<h5 class='card-title'>" + parkName + "</h5>" +
