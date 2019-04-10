@@ -82,6 +82,11 @@ input[type="checkbox"] {
     width: 286px;
 }
 
+/* Modal */
+.modal-body {
+    padding: 8px 1rem;
+}
+
 /* mobile phones */
 #quote-photo {
     width: 100%;

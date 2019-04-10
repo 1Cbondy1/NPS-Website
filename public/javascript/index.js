@@ -14,7 +14,7 @@ $( document ).ready(function() {
 
 });
 
-var queryURL = "https://developer.nps.gov/api/v1/parks?limit=50&start=50&q=National%20Park&fields=images,entranceFees&sort=-designation&api_key=yflsYenzvnQI9KvZVIiYrgee1zhKUiglWNoaPfa2"
+var queryURL = "https://developer.nps.gov/api/v1/parks?limit=50&start=50&q=National%20Park&fields=images,entranceFees,contacts,addresses&sort=-designation&api_key=yflsYenzvnQI9KvZVIiYrgee1zhKUiglWNoaPfa2"
 
 $.ajax({
     url: queryURL,
@@ -24,22 +24,44 @@ $.ajax({
     var i;
     for (i = 8; i < 38; i++) {
         var parkCardSpan = $("<span class='col-m-4 col-sm'>");
-        var parkName = response.data[i].fullName;
+        var parkFull = response.data[i].fullName;
         var parkDes = response.data[i].description;
         var parkImg = response.data[i].images[0].url;
         var parkState = response.data[i].states;
+        var parkCity = response.data[i].addresses[0].city;
+        var parkZip = response.data[i].addresses[0].postalCode;
+        var parkStreet = response.data[i].addresses[0].line1;
 
-        // var parkCost;
+        var parkPhone;
+        var parkCost;
+        var parkEmail;
+        
+        // Determine if phone number exists
+        if (response.data[i].contacts.phoneNumbers[0].phoneNumber) {
+            parkPhone = response.data[i].contacts.phoneNumbers[0].phoneNumber;
+        } else {
+            parkPhone = "No information available."
+        }
 
-        // if (response.data[i].entranceFees == null || response.data[i].entranceFees == undefined || response.data[i].entranceFees == "undefined") {
-        //     parkCost = "No cost information exists.";
-        //     return;
-        // } else if (response.data[i].entranceFees[1].cost == null || response.data[i].entranceFees == undefined || response.data[i].entranceFees == "undefined") {
-        //     parkCost = "No cost information exists.";
-        //     return;
-        // } else {
-        //     parkCost = response.data[i].entranceFees[1].cost;
-        // }
+        // Determine if entrance fee cost exists
+        var costTemp = response.data[i].entranceFees[0].cost;
+
+        if (costTemp) {
+            if (costTemp == 0) {
+                parkCost = "No entrance fee."
+            } else {
+                parkCost = "$" + ~~costTemp;
+            }
+        } else {
+            parkCost = "No information available."
+        }
+
+        // Determine if email address exists
+        if (response.data[i].contacts.emailAddresses[0].emailAddress) {
+            parkEmail = response.data[i].contacts.emailAddresses[0].emailAddress;
+        } else {
+            parkEmail = "No information available."
+        }
 
         var parkCard = 
         $("<span class='card' data-id='" + i + "' style='width: 18rem;'>" +
@@ -53,7 +75,7 @@ $.ajax({
             // Card image and body
             "<img src='" + parkImg + "' class='card-img-top' alt='park-photo'>" +
             "<span id='card-position' class='card-body module'>" +
-                "<h5 class='card-title'>" + parkName + "</h5>" +
+                "<h5 class='card-title'>" + parkFull + "</h5>" +
                 "<p class='card-text'>" + parkDes + "</p>" +
 
                 // Text fade
@@ -69,13 +91,16 @@ $.ajax({
             "<div class='modal-dialog' role='document'>" +
                 "<div class='modal-content'>" +
                     "<div class='modal-header'>" +
-                        "<h5 class='modal-title' id='exampleModalLabel'>" + parkName + "</h5>" +
+                        "<h5 class='modal-title' id='exampleModalLabel'>" + parkFull + " - " + parkState + "</h5>" +
                         "<button type='button' class='close' data-dismiss='modal' aria-label='Close'>" +
                         "<span aria-hidden='true'>&times;</span>" +
                         "</button>" +
                     "</div>" +
-                    "<div class='modal-body card-text' id='modal-des'>Description: " + parkDes + "</div>" +
-                    "<div class='modal-body card-text' id='modal-des'>State: " + parkState + "</div>" +
+                    "<div class='modal-body card-text' id='modal-des'>Description:<br>" + parkDes + "</div>" +
+                    "<div class='modal-body card-text' id='modal-des'>Entrance Fee:<br>" + parkCost + "</div>" +
+                    "<div class='modal-body card-text' id='modal-des'>Park Office Address:<br>" + parkStreet + "<br>" + parkCity + ", " + parkState + " " + parkZip + "</div>" +
+                    "<div class='modal-body card-text' id='modal-des'>Phone Number:<br>" + parkPhone + "</div>" +
+                    "<div class='modal-body card-text' id='modal-des'>Email Address:<br>" + parkEmail + "</div>" +
                     "<div class='modal-footer'>" +
                         "<button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>" +
                     "</div>" +
