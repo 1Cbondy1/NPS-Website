@@ -68,6 +68,7 @@ input[type="checkbox"] {
 }
 .card-text {
     font-size: 13px;
+    text-align: left;
 }
 #card-position {
     position: relative;
