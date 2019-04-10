@@ -1,5 +1,9 @@
 $( document ).ready(function() {
 
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').trigger('focus')
+    })
+
     // determines the initial check-num value (0)
     parksVisited();
 
@@ -26,15 +30,25 @@ $.ajax({
 
         var parkCard = 
         $("<span class='card' data-id='" + i + "' style='width: 18rem;'>" +
+
+            // Card checkbox
             "<div class='form-check'>" +
                 "<input class='form-check-input' type='checkbox' value=''" + "id='defaultCheck1' data-id='" + i + "'>" +
                 " <label class='form-check-label' for='defaultCheck1'></label>" +
             "</div>" +
+
+            // Card image and body
             "<img src='" + parkImg + "' class='card-img-top' alt='park-photo'>" +
-            "<span class='card-body module'>" +
+            "<span id='card-position' class='card-body module'>" +
                 "<h5 class='card-title'>" + parkName + "</h5>" +
                 "<p class='card-text'>" + parkDes + "</p>" +
+
+                // Text fade
+                "<span id='white-fade'></span>'" +
             "</span>" +
+
+            // Button trigger modal
+            "<button type='button' class='btn btn-success' data-toggle='modal' data-target='#exampleModal'>See more...</button>" +
         "</span>");
 
         parkCardSpan.append(parkCard);
