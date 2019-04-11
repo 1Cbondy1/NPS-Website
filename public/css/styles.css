@@ -36,6 +36,12 @@ body {
     vertical-align: middle;
     margin: 10px;
 }
+div.sticky {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 20;
+}
 
 /* Card styles */
 .card {
@@ -85,6 +91,16 @@ input[type="checkbox"] {
 /* Modal */
 .modal-body {
     padding: 8px 1rem;
+}
+.w-100 {
+    width: 100%;
+    Height: 250px;
+    object-fit: cover;
+}
+.modal-img {
+    width: 100%;
+    Height: 300px;
+    object-fit: cover;
 }
 
 /* mobile phones */

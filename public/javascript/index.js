@@ -4,6 +4,8 @@ $( document ).ready(function() {
         $('#myInput').trigger('focus')
     })
 
+    $('.carousel').carousel()
+
     // determines the initial check-num value (0)
     parksVisited();
 
@@ -21,8 +23,7 @@ $.ajax({
     method: "GET"
 }).then(function(response) {
 
-    var i;
-    for (i = 8; i < 38; i++) {
+    for (var i = 8; i < 38; i++) {
         var parkCardSpan = $("<span class='col-m-4 col-sm'>");
         var parkFull = response.data[i].fullName;
         var parkDes = response.data[i].description;
@@ -96,6 +97,8 @@ $.ajax({
                         "<span aria-hidden='true'>&times;</span>" +
                         "</button>" +
                     "</div>" +
+
+                    "<img src='" + parkImg + "' class='card-img-top modal-img' alt='park-photo'>" +
                     "<div class='modal-body card-text' id='modal-des'>Description:<br>" + parkDes + "</div>" +
                     "<div class='modal-body card-text' id='modal-des'>Entrance Fee:<br>" + parkCost + "</div>" +
                     "<div class='modal-body card-text' id='modal-des'>Park Office Address:<br>" + parkStreet + "<br>" + parkCity + ", " + parkState + " " + parkZip + "</div>" +
