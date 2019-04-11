@@ -115,15 +115,18 @@ input[type="checkbox"] {
 }
 
 /* filter buttons */
+#position {
+    position: relative;
+}
 #filter {
     position: absolute;
     top: 10px;
-    left: 0px;
+    left: 15px;
 }
 #reset {
     position: absolute;
     top: 10px;
-    right: 0px;
+    right: 15px;
 }
 .hide-card {
     display: none;
