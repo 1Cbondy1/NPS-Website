@@ -4,10 +4,6 @@ $( document ).ready(function() {
         $('#myInput').trigger('focus')
     })
 
-    $(function () {
-        $('[data-toggle="popover"]').popover()
-    })
-
     // determines the initial check-num value (0)
     parksVisited();
 
@@ -26,10 +22,22 @@ $( document ).ready(function() {
         for (var k = 0; k < unchecked.length; k++) {
             var uncheckedId = unchecked[k].id;
             var uncheckedCol = document.querySelectorAll('.myCol[ data-id="' + uncheckedId + '"]');
-            $(uncheckedCol).remove();
+            $(uncheckedCol).removeClass('show-card');
+            $(uncheckedCol).addClass('hide-card');
         }
     });
 
+    // click function that restores all cards
+    $( "#reset" ).click(function() {
+        var hidden = document.querySelectorAll('.hide-card');
+
+        // grab the data-id's of all hidden cards and un-hides them
+        for (var l = 0; l < hidden.length; l++) {
+            var hiddenCol = document.querySelectorAll('.myCol[ data-id="' + hidden[l].dataset.id + '"]');
+            $(hiddenCol).removeClass('hide-card');
+            $(hiddenCol).addClass('show-card');
+        }
+    });
 });
 
 var queryURL = "https://developer.nps.gov/api/v1/parks?limit=50&start=50&q=National%20Park&fields=images,entranceFees,contacts,addresses&sort=-designation&api_key=yflsYenzvnQI9KvZVIiYrgee1zhKUiglWNoaPfa2"
@@ -40,7 +48,7 @@ $.ajax({
 }).then(function(response) {
 
     for (var i = 8; i < 38; i++) {
-        var parkCardSpan = $("<span class='myCol' data-id='" + i + "'>");
+        var parkCardSpan = $("<span class='myCol show-card' data-id='" + i + "'>");
         var parkFull = response.data[i].fullName;
         var parkDes = response.data[i].description;
         var parkImg = response.data[i].images[0].url;
