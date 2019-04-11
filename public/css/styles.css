@@ -48,12 +48,7 @@ div.sticky {
 .navbar-brand {
     font-size: 19.25px;
 }
-#filter-unseen {
-    position: absolute;
-    top: 10px;
-    right: 0px;
-}
-#filter-seen {
+#filter {
     position: absolute;
     top: 10px;
     left: 0px;
@@ -134,9 +129,6 @@ input[type="checkbox"] {
 #github-link {
     display: none;
 }
-#park-select {
-    color: white;
-}
 
 /* tablets */
 @media only screen and (min-width: 767px) {
@@ -150,9 +142,6 @@ input[type="checkbox"] {
     }
     #github-link {
         display: block;
-    }
-    #park-select {
-        color: black;
     }
 }
 
@@ -168,8 +157,5 @@ input[type="checkbox"] {
     }
     #github-link {
         display: block;
-    }
-    #park-select {
-        color: black;
     }
 }

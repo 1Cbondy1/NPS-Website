@@ -16,21 +16,17 @@ $( document ).ready(function() {
         parksVisited();
     });
 
-    // click that removes all cards with checked boxes
-    $( "#filter-seen" ).click(function() {
+    // click function that removes all cards with unchecked boxes
+    $( "#filter" ).click(function() {
 
-        // find checked boxes and save as variable
-        var checked = document.querySelectorAll('input[type="checkbox"]:checked');
+        // find unchecked boxes and save as array
+        var unchecked = document.querySelectorAll('input[type="checkbox"]:not(:checked)');
 
-        // grab the id's of all checked boxes and remove cards with matching id's
-        for (var k = 0; k < checked.length; k++) {
-            console.log(checked[k].id);
-            var checkedId = checked[k].id;
-            
-            var checkedCard = document.querySelectorAll('.card[ data-id="' + checkedId + '"]');
-            $(checkedCard).remove();
-            var checkedCol = document.querySelectorAll('.myCol[ data-id="' + checkedId + '"]');
-            $(checkedCol).remove();
+        // grab the id's of all unchecked boxes and remove cards with matching id's
+        for (var k = 0; k < unchecked.length; k++) {
+            var uncheckedId = unchecked[k].id;
+            var uncheckedCol = document.querySelectorAll('.myCol[ data-id="' + uncheckedId + '"]');
+            $(uncheckedCol).remove();
         }
     });
 
