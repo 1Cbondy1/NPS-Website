@@ -34,7 +34,7 @@ body {
 }
 .vert-center {
     vertical-align: middle;
-    margin: 10px;
+    margin-left: 10px;
 }
 div.sticky {
     position: sticky;
@@ -42,8 +42,29 @@ div.sticky {
     background: white;
     z-index: 20;
 }
+.dropdown-menu {
+    width: 500px;
+}
+.navbar-brand {
+    font-size: 19.25px;
+}
+#filter-unseen {
+    position: absolute;
+    top: 10px;
+    right: 0px;
+}
+#filter-seen {
+    position: absolute;
+    top: 10px;
+    left: 0px;
+}
 
 /* Card styles */
+.myCol {
+    margin: 0px;
+    padding: 0px;
+    margin: auto;
+}
 .card {
     text-align: left;
     margin: auto;
@@ -110,6 +131,12 @@ input[type="checkbox"] {
     object-fit: cover;
     margin-bottom: 1rem;
 }
+#github-link {
+    display: none;
+}
+#park-select {
+    color: white;
+}
 
 /* tablets */
 @media only screen and (min-width: 767px) {
@@ -120,6 +147,12 @@ input[type="checkbox"] {
     }
     #quote {
         font-size: 24px;
+    }
+    #github-link {
+        display: block;
+    }
+    #park-select {
+        color: black;
     }
 }
 
@@ -132,5 +165,11 @@ input[type="checkbox"] {
     }
     #quote {
         font-size: 32px;
+    }
+    #github-link {
+        display: block;
+    }
+    #park-select {
+        color: black;
     }
 }
