@@ -12,6 +12,12 @@ body {
     border: 1px solid lightgrey;
     border-top: none;
     border-radius: 6px;
+    justify-content: inherit
+}
+.navbar-nav {
+    flex-direction: row;
+    position: absolute;
+    right: 20px
 }
 .text {
     font-size: 16px;
@@ -47,6 +53,10 @@ div.sticky {
 }
 .navbar-brand {
     font-size: 19.25px;
+}
+#info-hidden {
+    display:none;
+    font-size: 14px;
 }
 
 /* Card styles */
@@ -145,6 +155,10 @@ input[type="checkbox"] {
 #github-link {
     display: none;
 }
+#about-link {
+    display: none;
+    margin-right: 20px;
+}
 
 /* tablets */
 @media only screen and (min-width: 767px) {
@@ -157,7 +171,12 @@ input[type="checkbox"] {
         font-size: 24px;
     }
     #github-link {
-        display: block;
+        display: inline-block;
+    }
+    #about-link {
+        display: inline-block;
+        margin-right: 20px;
+        cursor: pointer;
     }
 }
 
@@ -170,8 +189,5 @@ input[type="checkbox"] {
     }
     #quote {
         font-size: 32px;
-    }
-    #github-link {
-        display: block;
     }
 }

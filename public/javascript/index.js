@@ -1,8 +1,14 @@
 $( document ).ready(function() {
 
+    $("#info-hidden").hide();
+
+    $( "#about-link" ).click(function() {
+        $("#info-hidden").slideToggle();
+    });
+
     $('#myModal').on('shown.bs.modal', function () {
         $('#myInput').trigger('focus')
-    })
+    });
 
     // determines the initial check-num value (0)
     parksVisited();
