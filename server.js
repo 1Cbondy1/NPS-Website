@@ -62,7 +62,7 @@ app.put("/checked/:id", function(req, res) {
     });
 });
 
-app.listen(process.env.PORT || 3002, function () {
-    var port = server.address().port;
-    console.log("Express is working on port " + port);
+// Start the server
+app.listen(process.env.PORT || PORT, function() {
+    console.log("App running on port " + PORT + "!");
 });
