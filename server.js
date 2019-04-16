@@ -2,7 +2,7 @@
 const express = require("express");
 const mysql = require("mysql");
 
-var PORT = 3001;
+var PORT = 3002;
 
 // Initialize Express
 const app = express();
@@ -35,15 +35,34 @@ connection.connect(function(err) {
     console.log("connected as id " + connection.threadId);
 });
 
+// // Function that builds card checkbox
+// function buildCheck(checkboxes) {
+//     let html = "<span>";
+
+//     for (var i = 0; i < checkboxes.length; i++) {
+//         const c = checkboxes[i];
+//         html +=
+// `
+// <div class='form-check'>
+//     <input class='form-check-input' type='checkbox' value=''id='${c.id}' data-id='${c.id}' ${c.checked}>
+//     <label class='form-check-label' for='defaultCheck1'></label>
+// </div>
+// `
+//     }
+//     html += "</span>";
+//     return html;
+// }
+
 app.get("/select", function(req, res) {
 
     connection.query("SELECT * FROM selections;", function(err, data) {
-      if (err) {
-        return res.status(500).end();
-      } else {
-        console.log(data);
-      }
-        res.send(data);
+        if (err) {
+            return res.status(500).end();
+        } else {
+            // let html = buildCheck(data);
+            // res.send(html);
+        }
+        res.json(data);
     });
 });
 
