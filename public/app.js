@@ -122,12 +122,6 @@ $.ajax({
         var parkCard = 
         $("<span class='card' id='" + i + "' data-id='" + i + "' style='width: 18rem;'>" +
 
-            "<span class='place-here'></span>" +
-            // "<div class='form-check'>" +
-            //     "<input class='form-check-input' type='checkbox' value=''" + "id='" + i + "' data-id='" + i + "'>" +
-            //     " <label class='form-check-label' for='defaultCheck1'></label>" +
-            // "</div>" +
-
             // Card image and body
             "<img src='" + parkImg + "' class='card-img-top' alt='park-photo'>" +
             "<span id='card-position' class='card-body module'>" +
@@ -176,41 +170,27 @@ $.ajax({
 
     $(".placeholder").remove();
 
+    // get request that creates dom element for checkboxes
     $.get("/select", function(data) {
         for (var i = 0; i < data.length; i++) {
-            if (data[i].checked) {
-                console.log(data[i].id);
+            if (data[i].checked == 1) {
     
                 // Card checkbox
-
                 var checkCard = document.createElement('span');
-                checkCard.innerHTML = "<div class='form-check'><input class='form-check-input' type='checkbox' value='' id='" + data[i].id + "' data-id='" + data[i].id + "'checked><label class='form-check-label' for='defaultCheck1'></label></div>";
+                checkCard.innerHTML = "<div style='z-index:50' class='form-check in-front'><input class='form-check-input' type='checkbox' value='' id='" + data[i].id + "' data-id='" + data[i].id + "'checked><label class='form-check-label' for='defaultCheck1'></label></div>";
     
                 $(".card")[i].prepend( checkCard.firstChild );
+
+            } else {
+                // Card checkbox
+                var noCheckCard = document.createElement('span');
+                noCheckCard.innerHTML = "<div style='z-index:50' class='form-check in-front'><input class='form-check-input' type='checkbox' value='' id='" + data[i].id + "' data-id='" + data[i].id + "'><label class='form-check-label' for='defaultCheck1'></label></div>";
+    
+                $(".card")[i].prepend( noCheckCard.firstChild );
+
             }
         }
     });
-
-    // $.get("/select", function(data) {
-    //     for (var i = 0; i < data.length; i++) {
-    //         if (data[i].checked) {
-    //             console.log(data[i].id);
-
-    //             $('input:checkbox').change(function(){
-    //                 if($(this).is(":checked")) {
-    //                     $(this).prop("menuitemshow");
-    //                 } else {
-    //                     $('div.menuitem').removeClass("menuitemshow");
-    //                 }
-    //             });
-
-    //             $("input:checkbox").change(function () {
-    //                 var value = $(this).attr("thisCheck");
-    //                 $(":checkbox[class='" + value + "']").prop("checked", this.checked);
-    //             })
-    //         }
-    //     }
-    // });
 });
 
 
@@ -221,5 +201,4 @@ function parksVisited() {
     console.log("Number of parks checked: " + parkNum);
 
     $("#check-num").html(parkNum);
-
 }
