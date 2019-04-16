@@ -20,8 +20,6 @@ $( document ).ready(function() {
         parksVisited();
     });
 
-    var checkObject = [""];
-
     // onclick function that updates the database's 'checked' values for the checkboxes
     $(document).on('click', "input.form-check-input", function() {   
         
@@ -34,19 +32,14 @@ $( document ).ready(function() {
             parkChecked = { id: id, checked: 0 };
         }
     
-        // $.ajax("/checked/" + id, {
-        //     type: "PUT",
-        //     data: parkChecked
-        //     }).then(
-        //         function() {
-        //         console.log("Updated id: " + id);
-        //     }
-        // );
-
-        checkObject.push(parkChecked);
-        
-        // Put the object into storage
-        localStorage.setItem('checkObject', JSON.stringify(checkObject));
+        $.ajax("/checked/" + id, {
+            type: "PUT",
+            data: parkChecked
+            }).then(
+                function() {
+                console.log("Updated id: " + id);
+            }
+        );
     });
 
     // click function that removes all cards with unchecked boxes
@@ -86,7 +79,17 @@ $.ajax({
 
     for (var i = 8; i < 29; i++) {
 
-        var isChecked;
+        var isChecked = "";
+
+        $.ajax({
+            url: "/select",
+            method: "GET",
+            success: function (data) {
+                tmp = data;
+            }
+        }).then(function(data) {
+            console.log(data);
+        });
 
         var parkCardSpan = $("<span class='myCol show-card' data-id='" + i + "'>");
         var parkFull = response.data[i].fullName;
@@ -163,11 +166,11 @@ $.ajax({
                     "</div>" +
 
                     "<img src='" + parkImg + "' class='card-img-top modal-img' alt='park-photo'>" +
-                    "<div class='modal-body card-text' id='modal-des'>Description:<br>" + parkDes + "</div>" +
-                    "<div class='modal-body card-text' id='modal-des'>Entrance Fee:<br>" + parkCost + "</div>" +
-                    "<div class='modal-body card-text' id='modal-des'>Park Office Address:<br>" + parkStreet + "<br>" + parkCity + ", " + parkState + " " + parkZip + "</div>" +
-                    "<div class='modal-body card-text' id='modal-des'>Phone Number:<br>" + parkPhone + "</div>" +
-                    "<div class='modal-body card-text' id='modal-des'>Email Address:<br>" + parkEmail + "</div>" +
+                    "<div class='modal-body card-text' id='modal-des'><br><strong>Description:</strong><br>" + parkDes + "</div>" +
+                    "<div class='modal-body card-text' id='modal-des'><strong>Entrance Fee:</strong><br>" + parkCost + "</div>" +
+                    "<div class='modal-body card-text' id='modal-des'><strong>Park Office Address:</strong><br>" + parkStreet + "<br>" + parkCity + ", " + parkState + " " + parkZip + "</div>" +
+                    "<div class='modal-body card-text' id='modal-des'><strong>Phone Number:</strong><br>" + parkPhone + "</div>" +
+                    "<div class='modal-body card-text' id='modal-des'><strong>Email Address:</strong><br>" + parkEmail + "</div>" +
                     "<div class='modal-footer'>" +
                         "<button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>" +
                     "</div>" +

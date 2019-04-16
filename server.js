@@ -35,14 +35,17 @@ connection.connect(function(err) {
     console.log("connected as id " + connection.threadId);
 });
 
-app.get("/selections", function(req, res) {
+app.get("/select", function(req, res) {
+
     connection.query("SELECT * FROM selections;", function(err, data) {
       if (err) {
         return res.status(500).end();
+      } else {
+        console.log(data);
       }
-    res.send(data);
+        res.send(data);
     });
-  });
+});
 
 app.put("/checked/:id", function(req, res) {
     connection.query("UPDATE selections SET checked = ? WHERE id = ?", [req.body.checked, req.body.id], function(err, result) {
