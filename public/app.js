@@ -1,7 +1,9 @@
 $( document ).ready(function() {
 
+    // hide 'About' information initially
     $("#info-hidden").hide();
 
+    // onclick toggles the 'About' information's visibility
     $( "#about-link" ).click(function() {
         $("#info-hidden").slideToggle();
     });
@@ -16,6 +18,28 @@ $( document ).ready(function() {
     // updates the check-num value anytime the page is clicked
     $( "body" ).click(function() {
         parksVisited();
+    });
+
+    // onclick function that updates the database's 'checked' values for the checkboxes
+    $(document).on('click', "input.form-check-input", function() {   
+        
+        var parkChecked;
+        var id = this.id;
+
+        if ($(this).is( ":checked" )) {
+            parkChecked = { id: id, checked: 1 };
+        } else { 
+            parkChecked = { id: id, checked: 0 };
+        }
+    
+        $.ajax("/checked/" + id, {
+            type: "PUT",
+            data: parkChecked
+            }).then(
+                function() {
+                console.log("Updated id: " + id);
+            }
+        );
     });
 
     // click function that removes all cards with unchecked boxes
@@ -53,7 +77,8 @@ $.ajax({
     method: "GET"
 }).then(function(response) {
 
-    for (var i = 8; i < 38; i++) {
+    for (var i = 8; i < 29; i++) {
+
         var parkCardSpan = $("<span class='myCol show-card' data-id='" + i + "'>");
         var parkFull = response.data[i].fullName;
         var parkDes = response.data[i].description;
@@ -95,13 +120,7 @@ $.ajax({
         }
 
         var parkCard = 
-        $("<span class='card' data-id='" + i + "' style='width: 18rem;'>" +
-
-            // Card checkbox
-            "<div class='form-check'>" +
-                "<input class='form-check-input' type='checkbox' value=''" + "id='" + i + "' data-id='" + i + "'>" +
-                " <label class='form-check-label' for='defaultCheck1'></label>" +
-            "</div>" +
+        $("<span class='card' id='" + i + "' data-id='" + i + "' style='width: 18rem;'>" +
 
             // Card image and body
             "<img src='" + parkImg + "' class='card-img-top' alt='park-photo'>" +
@@ -129,11 +148,11 @@ $.ajax({
                     "</div>" +
 
                     "<img src='" + parkImg + "' class='card-img-top modal-img' alt='park-photo'>" +
-                    "<div class='modal-body card-text' id='modal-des'>Description:<br>" + parkDes + "</div>" +
-                    "<div class='modal-body card-text' id='modal-des'>Entrance Fee:<br>" + parkCost + "</div>" +
-                    "<div class='modal-body card-text' id='modal-des'>Park Office Address:<br>" + parkStreet + "<br>" + parkCity + ", " + parkState + " " + parkZip + "</div>" +
-                    "<div class='modal-body card-text' id='modal-des'>Phone Number:<br>" + parkPhone + "</div>" +
-                    "<div class='modal-body card-text' id='modal-des'>Email Address:<br>" + parkEmail + "</div>" +
+                    "<div class='modal-body card-text' id='modal-des'><br><strong>Description:</strong><br>" + parkDes + "</div>" +
+                    "<div class='modal-body card-text' id='modal-des'><strong>Entrance Fee:</strong><br>" + parkCost + "</div>" +
+                    "<div class='modal-body card-text' id='modal-des'><strong>Park Office Address:</strong><br>" + parkStreet + "<br>" + parkCity + ", " + parkState + " " + parkZip + "</div>" +
+                    "<div class='modal-body card-text' id='modal-des'><strong>Phone Number:</strong><br>" + parkPhone + "</div>" +
+                    "<div class='modal-body card-text' id='modal-des'><strong>Email Address:</strong><br>" + parkEmail + "</div>" +
                     "<div class='modal-footer'>" +
                         "<button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>" +
                     "</div>" +
@@ -150,10 +169,36 @@ $.ajax({
     parksVisited();
 
     $(".placeholder").remove();
+
+    // get request that creates dom element for checkboxes
+    $.get("/select", function(data) {
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].checked == 1) {
+    
+                // Card checkbox
+                var checkCard = document.createElement('span');
+                checkCard.innerHTML = "<div style='z-index:50' class='form-check in-front'><input class='form-check-input' type='checkbox' value='' id='" + data[i].id + "' data-id='" + data[i].id + "'checked><label class='form-check-label' for='defaultCheck1'></label></div>";
+    
+                $(".card")[i].prepend( checkCard.firstChild );
+
+            } else {
+                // Card checkbox
+                var noCheckCard = document.createElement('span');
+                noCheckCard.innerHTML = "<div style='z-index:50' class='form-check in-front'><input class='form-check-input' type='checkbox' value='' id='" + data[i].id + "' data-id='" + data[i].id + "'><label class='form-check-label' for='defaultCheck1'></label></div>";
+    
+                $(".card")[i].prepend( noCheckCard.firstChild );
+
+            }
+        }
+    });
 });
+
 
 // function that counts checked boxes and displays the value
 function parksVisited() {
+
     var parkNum = document.querySelectorAll('input[type="checkbox"]:checked').length;
+    console.log("Number of parks checked: " + parkNum);
+
     $("#check-num").html(parkNum);
 }
