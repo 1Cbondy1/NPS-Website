@@ -46,7 +46,7 @@ div.sticky {
     position: sticky;
     top: 0;
     background: white;
-    z-index: 20;
+    z-index: 100;
 }
 .dropdown-menu {
     width: 500px;
