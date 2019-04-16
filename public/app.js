@@ -1,7 +1,9 @@
 $( document ).ready(function() {
 
+    // hide 'About' information initially
     $("#info-hidden").hide();
 
+    // onclick toggles the 'About' information's visibility
     $( "#about-link" ).click(function() {
         $("#info-hidden").slideToggle();
     });
@@ -16,6 +18,35 @@ $( document ).ready(function() {
     // updates the check-num value anytime the page is clicked
     $( "body" ).click(function() {
         parksVisited();
+    });
+
+    var checkObject = [""];
+
+    // onclick function that updates the database's 'checked' values for the checkboxes
+    $(document).on('click', "input.form-check-input", function() {   
+        
+        var parkChecked;
+        var id = this.id;
+
+        if ($(this).is( ":checked" )) {
+            parkChecked = { id: id, checked: 1 };
+        } else { 
+            parkChecked = { id: id, checked: 0 };
+        }
+    
+        // $.ajax("/checked/" + id, {
+        //     type: "PUT",
+        //     data: parkChecked
+        //     }).then(
+        //         function() {
+        //         console.log("Updated id: " + id);
+        //     }
+        // );
+
+        checkObject.push(parkChecked);
+        
+        // Put the object into storage
+        localStorage.setItem('checkObject', JSON.stringify(checkObject));
     });
 
     // click function that removes all cards with unchecked boxes
@@ -53,7 +84,10 @@ $.ajax({
     method: "GET"
 }).then(function(response) {
 
-    for (var i = 8; i < 38; i++) {
+    for (var i = 8; i < 29; i++) {
+
+        var isChecked;
+
         var parkCardSpan = $("<span class='myCol show-card' data-id='" + i + "'>");
         var parkFull = response.data[i].fullName;
         var parkDes = response.data[i].description;
@@ -99,7 +133,7 @@ $.ajax({
 
             // Card checkbox
             "<div class='form-check'>" +
-                "<input class='form-check-input' type='checkbox' value=''" + "id='" + i + "' data-id='" + i + "'>" +
+                "<input class='form-check-input' type='checkbox' value=''" + "id='" + i + "' data-id='" + i + "' " + isChecked + ">" +
                 " <label class='form-check-label' for='defaultCheck1'></label>" +
             "</div>" +
 
@@ -154,6 +188,10 @@ $.ajax({
 
 // function that counts checked boxes and displays the value
 function parksVisited() {
+
     var parkNum = document.querySelectorAll('input[type="checkbox"]:checked').length;
+    console.log("Number of parks checked: " + parkNum);
+
     $("#check-num").html(parkNum);
+
 }
