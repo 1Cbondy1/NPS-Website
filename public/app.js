@@ -70,99 +70,102 @@ $( document ).ready(function() {
     });
 });
 
-var queryURL = "https://developer.nps.gov/api/v1/parks?limit=50&start=50&q=National%20Park&fields=images,entranceFees,contacts,addresses&sort=-designation&api_key=yflsYenzvnQI9KvZVIiYrgee1zhKUiglWNoaPfa2"
+// old 2019 query
+// var queryURL = "https://developer.nps.gov/api/v1/parks?limit=50&start=50&q=National%20Park&fields=images,entranceFees,contacts,addresses&sort=-designation&api_key=tEWu7XVxOKzlySro5kcPq3s7zZkXjfR53S4ElrQk"
+
+var queryURL = "https://developer.nps.gov/api/v1/parks?limit=100&start=0&q=National%20Park&fields=images,entranceFees,contacts,addresses&sort=-relevanceScore&api_key=tEWu7XVxOKzlySro5kcPq3s7zZkXjfR53S4ElrQk"
 
 $.ajax({
     url: queryURL,
     method: "GET"
 }).then(function(response) {
+    for (var i = 0; i < response.data.length; i++) {
+        if (response.data[i].designation == "National Park") {
+            var parkCardSpan = $("<span class='myCol show-card' data-id='" + i + "'>");
+            var parkFull = response.data[i].fullName;
+            var parkDes = response.data[i].description;
+            var parkImg = response.data[i].images[0].url;
+            var parkState = response.data[i].states;
+            var parkCity = response.data[i].addresses[0].city;
+            var parkZip = response.data[i].addresses[0].postalCode;
+            var parkStreet = response.data[i].addresses[0].line1;
 
-    for (var i = 8; i < 29; i++) {
-
-        var parkCardSpan = $("<span class='myCol show-card' data-id='" + i + "'>");
-        var parkFull = response.data[i].fullName;
-        var parkDes = response.data[i].description;
-        var parkImg = response.data[i].images[0].url;
-        var parkState = response.data[i].states;
-        var parkCity = response.data[i].addresses[0].city;
-        var parkZip = response.data[i].addresses[0].postalCode;
-        var parkStreet = response.data[i].addresses[0].line1;
-
-        var parkPhone;
-        var parkCost;
-        var parkEmail;
-        
-        // Determine if phone number exists
-        if (response.data[i].contacts.phoneNumbers[0].phoneNumber) {
-            parkPhone = response.data[i].contacts.phoneNumbers[0].phoneNumber;
-        } else {
-            parkPhone = "No information available."
-        }
-
-        // Determine if entrance fee cost exists
-        var costTemp = response.data[i].entranceFees[0].cost;
-
-        if (costTemp) {
-            if (costTemp == 0) {
-                parkCost = "No entrance fee."
+            var parkPhone;
+            var parkCost;
+            var parkEmail;
+            
+            // Determine if phone number exists
+            if (response.data[i].contacts.phoneNumbers[0].phoneNumber) {
+                parkPhone = response.data[i].contacts.phoneNumbers[0].phoneNumber;
             } else {
-                parkCost = "$" + ~~costTemp;
+                parkPhone = "No information available."
             }
-        } else {
-            parkCost = "No information available."
-        }
 
-        // Determine if email address exists
-        if (response.data[i].contacts.emailAddresses[0].emailAddress) {
-            parkEmail = response.data[i].contacts.emailAddresses[0].emailAddress;
-        } else {
-            parkEmail = "No information available."
-        }
+            // Determine if entrance fee exists
+            var costTemp = response.data[i].entranceFees;
 
-        var parkCard = 
-        $("<span class='card' id='" + i + "' data-id='" + i + "' style='width: 18rem;'>" +
+            if (costTemp && costTemp != undefined) {
+                if (costTemp == 0) {
+                    parkCost = "No entrance fee."
+                } else {
+                    parkCost = "$" + ~~costTemp;
+                }
+            } else {
+                parkCost = "No information available."
+            }
 
-            // Card image and body
-            "<img src='" + parkImg + "' class='card-img-top' alt='park-photo'>" +
-            "<span id='card-position' class='card-body module'>" +
-                "<h5 class='card-title'>" + parkFull + "</h5>" +
-                "<p class='card-text'>" + parkDes + "</p>" +
+            // Determine if email address exists
+            if (response.data[i].contacts.emailAddresses[0].emailAddress) {
+                parkEmail = response.data[i].contacts.emailAddresses[0].emailAddress;
+            } else {
+                parkEmail = "No information available."
+            }
 
-                // Text fade
-                "<span id='white-fade'></span>'" +
-            "</span>" +
+            var parkCard = 
+            $("<span class='card' id='" + i + "' data-id='" + i + "' style='width: 18rem;'>" +
 
-            // Button trigger modal
-            "<button type='button' class='btn btn-success' data-toggle='modal' data-target='#exampleModal-" + i + "'>See more...</button>" +
-        "</span>");
+                // Card image and body
+                "<img src='" + parkImg + "' class='card-img-top' alt='park-photo'>" +
+                "<span id='card-position' class='card-body module'>" +
+                    "<h5 class='card-title'>" + parkFull + "</h5>" +
+                    "<p class='card-text'>" + parkDes + "</p>" +
 
-        var modalDiv =
-        $("<div class='modal fade' id='exampleModal-" + i + "' tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true'>" +
-            "<div class='modal-dialog' role='document'>" +
-                "<div class='modal-content'>" +
-                    "<div class='modal-header'>" +
-                        "<h5 class='modal-title' id='exampleModalLabel'>" + parkFull + " - " + parkState + "</h5>" +
-                        "<button type='button' class='close' data-dismiss='modal' aria-label='Close'>" +
-                        "<span aria-hidden='true'>&times;</span>" +
-                        "</button>" +
-                    "</div>" +
+                    // Text fade
+                    "<span id='white-fade'></span>'" +
+                "</span>" +
 
-                    "<img src='" + parkImg + "' class='card-img-top modal-img' alt='park-photo'>" +
-                    "<div class='modal-body card-text' id='modal-des'><br><strong>Description:</strong><br>" + parkDes + "</div>" +
-                    "<div class='modal-body card-text' id='modal-des'><strong>Entrance Fee:</strong><br>" + parkCost + "</div>" +
-                    "<div class='modal-body card-text' id='modal-des'><strong>Park Office Address:</strong><br>" + parkStreet + "<br>" + parkCity + ", " + parkState + " " + parkZip + "</div>" +
-                    "<div class='modal-body card-text' id='modal-des'><strong>Phone Number:</strong><br>" + parkPhone + "</div>" +
-                    "<div class='modal-body card-text' id='modal-des'><strong>Email Address:</strong><br>" + parkEmail + "</div>" +
-                    "<div class='modal-footer'>" +
-                        "<button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>" +
+                // Button trigger modal
+                "<button type='button' class='btn btn-success' data-toggle='modal' data-target='#exampleModal-" + i + "'>See more...</button>" +
+            "</span>");
+
+            var modalDiv =
+            $("<div class='modal fade' id='exampleModal-" + i + "' tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true'>" +
+                "<div class='modal-dialog' role='document'>" +
+                    "<div class='modal-content'>" +
+                        "<div class='modal-header'>" +
+                            "<h5 class='modal-title' id='exampleModalLabel'>" + parkFull + " - " + parkState + "</h5>" +
+                            "<button type='button' class='close' data-dismiss='modal' aria-label='Close'>" +
+                            "<span aria-hidden='true'>&times;</span>" +
+                            "</button>" +
+                        "</div>" +
+
+                        "<img src='" + parkImg + "' class='card-img-top modal-img' alt='park-photo'>" +
+                        "<div class='modal-body card-text' id='modal-des'><br><strong>Description:</strong><br>" + parkDes + "</div>" +
+                        "<div class='modal-body card-text' id='modal-des'><strong>Entrance Fee:</strong><br>" + parkCost + "</div>" +
+                        "<div class='modal-body card-text' id='modal-des'><strong>Park Office Address:</strong><br>" + parkStreet + "<br>" + parkCity + ", " + parkState + " " + parkZip + "</div>" +
+                        "<div class='modal-body card-text' id='modal-des'><strong>Phone Number:</strong><br>" + parkPhone + "</div>" +
+                        "<div class='modal-body card-text' id='modal-des'><strong>Email Address:</strong><br>" + parkEmail + "</div>" +
+                        "<div class='modal-footer'>" +
+                            "<button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>" +
+                        "</div>" +
                     "</div>" +
                 "</div>" +
-            "</div>" +
-        "</div>");
+            "</div>");
 
-        parkCardSpan.append(parkCard);
-        $("#park-card").append(parkCardSpan);
-        $("#modal-div").append(modalDiv);
+            parkCardSpan.append(parkCard);
+            $("#park-card").append(parkCardSpan);
+            $("#modal-div").append(modalDiv);
+        }
     }
 
     // updates check-num value after ajax request
